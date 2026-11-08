@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kalendarz adwentowy</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      padding: 40px 20px;
+      font-family: Arial, sans-serif;
+      color: #fff;
+      text-align: center;
+      background: linear-gradient(135deg, #123b2a, #176044);
+    }
+
+    h1 {
+      margin-bottom: 10px;
+      font-size: clamp(2rem, 6vw, 3.5rem);
+    }
+
+    .intro {
+      margin: 0 auto 30px;
+      max-width: 600px;
+      line-height: 1.5;
+    }
+
+    .calendar {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(60px, 120px));
+      justify-content: center;
+      gap: 14px;
+      max-width: 540px;
+      margin: 0 auto;
+    }
+
+    .door {
+      min-height: 90px;
+      border: 2px solid #f4d58d;
+      border-radius: 14px;
+      color: #fff;
+      background: #b3313b;
+      font-size: 2rem;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 5px 0 #76212a;
+      transition: transform 0.15s, background 0.15s;
+    }
+
+    .door:hover {
+      transform: translateY(-3px);
+      background: #cf414a;
+    }
+
+    .door.opened {
+      background: #e3b94f;
+      color: #382710;
+      box-shadow: 0 5px 0 #a17a24;
+    }
+
+    #message {
+      min-height: 70px;
+      max-width: 540px;
+      margin: 28px auto 0;
+      padding: 18px;
+      border-radius: 14px;
+      color: #382710;
+      background: #fff6dd;
+      font-size: 1.1rem;
+      line-height: 1.5;
+    }
+
+    @media (max-width: 420px) {
+      .calendar {
+        grid-template-columns: repeat(4, minmax(55px, 1fr));
+        gap: 10px;
+      }
+
+      .door {
+        min-height: 72px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main>
+    <h1>🎄 Kalendarz adwentowy 🎄</h1>
+    <p class="intro">
+      Kliknij wybrany dzień i odkryj małą niespodziankę!
+    </p>
+
+    <section class="calendar" id="calendar" aria-label="Kalendarz adwentowy"></section>
+
+    <p id="message" aria-live="polite">
+      Tutaj pojawi się niespodzianka. Wybierz okienko!
+    </p>
+  </main>
+
+  <script>
+    const surprises = [
+      "Dzień 1: Uśmiechnij się do kogoś! 😊",
+      "Dzień 2: Zrób sobie kubek gorącej czekolady ☕",
+      "Dzień 3: Posłuchaj ulubionej świątecznej piosenki 🎶",
+      "Dzień 4: Napisz miłą wiadomość do bliskiej osoby 💌",
+      "Dzień 5: Obejrzyj świąteczny film 🎬",
+      "Dzień 6: Zjedz coś pysznego 🍪",
+      "Dzień 7: Zrób krótki spacer 🚶",
+      "Dzień 8: Powiedz komuś coś miłego 💛",
+      "Dzień 9: Zrób papierową śnieżynkę ❄️",
+      "Dzień 10: Zatańcz do jednej piosenki 💃",
+      "Dzień 11: Zrób sobie chwilę odpoczynku 🧣",
+      "Dzień 12: Podziel się czymś dobrym 🎁",
+      "Dzień 13: Zadzwoń do kogoś bliskiego 📞",
+      "Dzień 14: Zrób zdjęcie zimowej przyrody 📷",
+      "Dzień 15: Upiecz albo udekoruj ciasteczko 🍪",
+      "Dzień 16: Przeczytaj kilka stron książki 📖",
+      "Dzień 17: Zapal lampki lub świeczkę ✨",
+      "Dzień 18: Przypomnij sobie coś miłego z tego roku 🌟",
+      "Dzień 19: Zagraj w ulubioną grę 🎲",
+      "Dzień 20: Zrób komuś małą niespodziankę 🎀",
+      "Dzień 21: Załóż ciepłe skarpetki 🧦",
+      "Dzień 22: Zobacz coś, co zawsze poprawia Ci humor 😄",
+      "Dzień 23: Przygotuj się na święta bez pośpiechu 🎄",
+      "Dzień 24: Wesołych Świąt! 🎅"
+    ];
+
+    const calendar = document.querySelector("#calendar");
+    const message = document.querySelector("#message");
+
+    surprises.forEach((surprise, index) => {
+      const day = index + 1;
+      const button = document.createElement("button");
+
+      button.className = "door";
+      button.textContent = day;
+      button.setAttribute("aria-label", `Otwórz dzień ${day}`);
+
+      button.addEventListener("click", () => {
+        message.textContent = surprise;
+        button.classList.add("opened");
+      });
+
+      calendar.appendChild(button);
+    });
+  </script>
+</body>
+</html>
