@@ -56,9 +56,9 @@
     .sleigh {
       position: absolute;
       z-index: 3;
-      top: -125px;
+      top: -130px;
       left: 50%;
-      width: min(580px, 90vw);
+      width: min(380px, 80vw);
       height: auto;
       transform: translateX(-50%);
       pointer-events: none;
@@ -88,9 +88,9 @@
     .santa {
       position: absolute;
       z-index: 3;
-      top: 290px;
-      right: calc((100% - 520px) / 2 - 145px);
-      width: 580px;
+      top: 270px;
+      right: calc((100% - 520px) / 2 - 120px);
+      width: 250px;
       height: auto;
       pointer-events: none;
       animation: santa-float 4s ease-in-out infinite;
@@ -265,15 +265,14 @@
       }
 
       .sleigh {
-        top: -105px;
-        width: min(240px, 58vw);
+        top: -110px;
+        width: min(300px, 85vw);
       }
 
       .santa {
-        top: 260px;
-        right: -12px;
-        width: 82px;
-        opacity: 0.9;
+        top: 270px;
+        right: -35px;
+        width: 130px;
       }
     }
 
@@ -288,9 +287,9 @@
       }
 
       .santa {
-        top: 255px;
-        right: -8px;
-        width: 65px;
+        top: 270px;
+        right: -28px;
+        width: 105px;
       }
     }
 
@@ -389,7 +388,7 @@
       reward.classList.add("visible");
     });
 
-    // Padający śnieg
+    // Animacja padającego śniegu
     const canvas = document.querySelector("#snow");
     const ctx = canvas.getContext("2d");
     let flakes = [];
@@ -446,7 +445,7 @@
     window.addEventListener("resize", resizeSnow);
 
     // Muzyka próbuje wystartować po wejściu.
-    // Jeśli przeglądarka blokuje autoplay, ruszy po pierwszym kliknięciu.
+    // Jeśli przeglądarka zablokuje autoplay, ruszy po pierwszym kliknięciu.
     function startMusic() {
       music.play().catch(() => {
         document.addEventListener("click", () => {
