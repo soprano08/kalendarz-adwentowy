@@ -154,8 +154,8 @@
 
     #reward {
       display: none;
-      margin: 20px auto 0;
       max-width: 350px;
+      margin: 20px auto 0;
       animation: reveal 600ms ease both;
     }
 
@@ -176,29 +176,9 @@
       line-height: 1.7;
     }
 
-    .music-button {
-      display: block;
-      margin: 24px auto 0;
-      padding: 10px 15px;
-      border: 1px solid var(--gold);
-      border-radius: 2px;
-      color: var(--ink);
-      background: transparent;
-      font-family: Arial, sans-serif;
-      font-size: 0.8rem;
-      letter-spacing: 0.04em;
-      cursor: pointer;
-      transition: background 150ms ease, color 150ms ease;
-    }
-
-    .music-button:hover {
-      color: #fff;
-      background: var(--burgundy);
-    }
-
     .back-link {
       display: inline-block;
-      margin-top: 25px;
+      margin-top: 32px;
       color: var(--pine);
       font-family: Arial, sans-serif;
       font-size: 0.8rem;
@@ -254,6 +234,10 @@
 <body>
   <canvas id="snow" aria-hidden="true"></canvas>
 
+  <audio id="backgroundMusic" loop preload="auto">
+    <source src="muzyka-swiateczna.mp3" type="audio/mpeg">
+  </audio>
+
   <main>
     <p class="eyebrow">Kalendarz adwentowy</p>
     <h1>Dzień pierwszy</h1>
@@ -298,10 +282,6 @@
       </p>
     </section>
 
-    <button class="music-button" id="musicButton" type="button" aria-pressed="false">
-      ♫ Włącz muzykę
-    </button>
-
     <a class="back-link" href="index.html">← Wróć do kalendarza</a>
   </main>
 
@@ -309,7 +289,7 @@
     const giftButton = document.querySelector("#giftButton");
     const reward = document.querySelector("#reward");
     const hint = document.querySelector("#hint");
-    const musicButton = document.querySelector("#musicButton");
+    const music = document.querySelector("#backgroundMusic");
 
     giftButton.addEventListener("click", () => {
       giftButton.classList.add("open");
@@ -375,76 +355,17 @@
     drawSnow();
     window.addEventListener("resize", resizeSnow);
 
-    // Prosta melodia dzwonkowa zapętlona do odtworzenia
-    let audioContext;
-    let masterGain;
-    let melodyTimer;
-    let musicPlaying = false;
-
-    const melody = [
-      [659, 0.28], [659, 0.28], [659, 0.55],
-      [659, 0.28], [659, 0.28], [659, 0.55],
-      [659, 0.28], [784, 0.28], [523, 0.38],
-      [587, 0.18], [659, 0.7], [698, 0.28],
-      [698, 0.28], [698, 0.38], [698, 0.18],
-      [698, 0.28], [659, 0.28], [659, 0.28],
-      [659, 0.18], [659, 0.18], [659, 0.28],
-      [587, 0.28], [587, 0.28], [659, 0.28],
-      [587, 0.55], [784, 0.55]
-    ];
-
-    function playBell(frequency, startTime, duration) {
-      const oscillator = audioContext.createOscillator();
-      const volume = audioContext.createGain();
-
-      oscillator.type = "sine";
-      oscillator.frequency.value = frequency;
-
-      volume.gain.setValueAtTime(0.0001, startTime);
-      volume.gain.exponentialRampToValueAtTime(0.12, startTime + 0.025);
-      volume.gain.exponentialRampToValueAtTime(0.0001, startTime + duration);
-
-      oscillator.connect(volume);
-      volume.connect(masterGain);
-      oscillator.start(startTime);
-      oscillator.stop(startTime + duration + 0.03);
+    // Spróbuj włączyć muzykę po wejściu na stronę.
+    // Jeśli przeglądarka zablokuje autoplay, uruchom ją po pierwszym kliknięciu.
+    function startMusic() {
+      music.play().catch(() => {
+        document.addEventListener("click", () => {
+          music.play().catch(() => {});
+        }, { once: true });
+      });
     }
 
-    function playMelody() {
-      let time = audioContext.currentTime + 0.05;
-
-      for (const [frequency, duration] of melody) {
-        playBell(frequency, time, duration * 0.85);
-        time += duration;
-      }
-
-      const totalDuration = melody.reduce((sum, note) => sum + note[1], 0);
-      melodyTimer = window.setTimeout(playMelody, totalDuration * 1000 + 500);
-    }
-
-    musicButton.addEventListener("click", async () => {
-      if (!audioContext) {
-        audioContext = new (window.AudioContext || window.webkitAudioContext)();
-        masterGain = audioContext.createGain();
-        masterGain.gain.value = 0.35;
-        masterGain.connect(audioContext.destination);
-      }
-
-      if (musicPlaying) {
-        window.clearTimeout(melodyTimer);
-        masterGain.gain.setTargetAtTime(0, audioContext.currentTime, 0.08);
-        musicPlaying = false;
-        musicButton.textContent = "♫ Włącz muzykę";
-        musicButton.setAttribute("aria-pressed", "false");
-      } else {
-        await audioContext.resume();
-        masterGain.gain.setTargetAtTime(1, audioContext.currentTime, 0.08);
-        musicPlaying = true;
-        musicButton.textContent = "♫ Wyłącz muzykę";
-        musicButton.setAttribute("aria-pressed", "true");
-        playMelody();
-      }
-    });
+    startMusic();
   </script>
 </body>
 </html>
