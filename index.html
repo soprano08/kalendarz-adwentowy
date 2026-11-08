@@ -26,8 +26,8 @@
     }
 
     .intro {
-      margin: 0 auto 30px;
       max-width: 600px;
+      margin: 0 auto 30px;
       line-height: 1.5;
     }
 
@@ -41,13 +41,16 @@
     }
 
     .door {
+      display: grid;
       min-height: 90px;
+      place-items: center;
       border: 2px solid #f4d58d;
       border-radius: 14px;
       color: #fff;
       background: #b3313b;
       font-size: 2rem;
       font-weight: bold;
+      text-decoration: none;
       cursor: pointer;
       box-shadow: 0 5px 0 #76212a;
       transition: transform 0.15s, background 0.15s;
@@ -56,12 +59,6 @@
     .door:hover {
       transform: translateY(-3px);
       background: #cf414a;
-    }
-
-    .door.opened {
-      background: #e3b94f;
-      color: #382710;
-      box-shadow: 0 5px 0 #a17a24;
     }
 
     #message {
@@ -105,7 +102,7 @@
 
   <script>
     const surprises = [
-      "Dzień 1: Uśmiechnij się do kogoś! 😊",
+      "Dzień 1: Twoja pierwsza nagroda czeka na podstronie! 🎁",
       "Dzień 2: Zrób sobie kubek gorącej czekolady ☕",
       "Dzień 3: Posłuchaj ulubionej świątecznej piosenki 🎶",
       "Dzień 4: Napisz miłą wiadomość do bliskiej osoby 💌",
@@ -126,7 +123,7 @@
       "Dzień 19: Zagraj w ulubioną grę 🎲",
       "Dzień 20: Zrób komuś małą niespodziankę 🎀",
       "Dzień 21: Załóż ciepłe skarpetki 🧦",
-      "Dzień 22: Zobacz coś, co zawsze poprawia Ci humor 😄",
+      "Dzień 22: Zobacz coś, co poprawia Ci humor 😄",
       "Dzień 23: Przygotuj się na święta bez pośpiechu 🎄",
       "Dzień 24: Wesołych Świąt! 🎅"
     ];
@@ -136,18 +133,23 @@
 
     surprises.forEach((surprise, index) => {
       const day = index + 1;
-      const button = document.createElement("button");
+      const door = document.createElement("a");
 
-      button.className = "door";
-      button.textContent = day;
-      button.setAttribute("aria-label", `Otwórz dzień ${day}`);
+      door.className = "door";
+      door.textContent = day;
+      door.setAttribute("aria-label", `Otwórz dzień ${day}`);
 
-      button.addEventListener("click", () => {
-        message.textContent = surprise;
-        button.classList.add("opened");
-      });
+      if (day === 1) {
+        door.href = "dzien-1.html";
+      } else {
+        door.href = "#";
+        door.addEventListener("click", (event) => {
+          event.preventDefault();
+          message.textContent = surprise;
+        });
+      }
 
-      calendar.appendChild(button);
+      calendar.appendChild(door);
     });
   </script>
 </body>
