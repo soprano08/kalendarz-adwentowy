@@ -7,7 +7,6 @@
 
   <style>
     :root {
-      color-scheme: light;
       --pine: #14271f;
       --pine-light: #20372c;
       --cream: #f6f0e4;
@@ -39,10 +38,20 @@
       background-size: 120px 140px, 170px 180px, 200px 190px, 150px 170px, auto;
     }
 
+    #snow {
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+
     main {
+      position: relative;
+      z-index: 2;
       width: min(100%, 520px);
       padding: 54px 38px 34px;
-      position: relative;
       text-align: center;
       background: var(--cream);
       border: 1px solid #d5c49f;
@@ -167,9 +176,29 @@
       line-height: 1.7;
     }
 
+    .music-button {
+      display: block;
+      margin: 24px auto 0;
+      padding: 10px 15px;
+      border: 1px solid var(--gold);
+      border-radius: 2px;
+      color: var(--ink);
+      background: transparent;
+      font-family: Arial, sans-serif;
+      font-size: 0.8rem;
+      letter-spacing: 0.04em;
+      cursor: pointer;
+      transition: background 150ms ease, color 150ms ease;
+    }
+
+    .music-button:hover {
+      color: #fff;
+      background: var(--burgundy);
+    }
+
     .back-link {
       display: inline-block;
-      margin-top: 32px;
+      margin-top: 25px;
       color: var(--pine);
       font-family: Arial, sans-serif;
       font-size: 0.8rem;
@@ -223,6 +252,8 @@
 </head>
 
 <body>
+  <canvas id="snow" aria-hidden="true"></canvas>
+
   <main>
     <p class="eyebrow">Kalendarz adwentowy</p>
     <h1>Dzień pierwszy</h1>
@@ -236,29 +267,22 @@
       aria-label="Otwórz prezent"
       aria-controls="reward"
     >
-      <svg viewBox="0 0 200 200" role="img" aria-hidden="true">
+      <svg viewBox="0 0 200 200" aria-hidden="true">
         <ellipse cx="100" cy="171" rx="58" ry="9" fill="#263a2d" opacity=".12"/>
 
-        <!-- Pudełko -->
         <path d="M53 91h94v67a8 8 0 0 1-8 8H61a8 8 0 0 1-8-8V91Z" fill="#743b3b"/>
         <path d="M53 91h94v13H53z" fill="#834747"/>
-
-        <!-- Wstążka na pudełku -->
         <path d="M91 91h18v75H91z" fill="#c4a66a"/>
         <path d="M94 91h12v75H94z" fill="#d8bd83"/>
 
-        <!-- Pokrywka -->
         <g class="gift-lid">
-          <path d="M43 78h114v21H43z" rx="4" fill="#8a4a49"/>
+          <path d="M43 78h114v21H43z" fill="#8a4a49"/>
           <path d="M91 78h18v21H91z" fill="#d8bd83"/>
-
-          <!-- Kokarda -->
           <path d="M99 79C75 74 72 57 82 55c9-2 16 10 18 24Z" fill="#c4a66a"/>
           <path d="M101 79c24-5 27-22 17-24-9-2-16 10-18 24Z" fill="#d8bd83"/>
           <circle cx="100" cy="78" r="6" fill="#bd9a5b"/>
         </g>
 
-        <!-- Małe ozdobne punkty -->
         <circle cx="43" cy="53" r="2" fill="#bd9a5b"/>
         <circle cx="158" cy="58" r="2.5" fill="#bd9a5b"/>
         <path d="M35 125h8M39 121v8" stroke="#bd9a5b" stroke-width="1.5"/>
@@ -274,6 +298,10 @@
       </p>
     </section>
 
+    <button class="music-button" id="musicButton" type="button" aria-pressed="false">
+      ♫ Włącz muzykę
+    </button>
+
     <a class="back-link" href="index.html">← Wróć do kalendarza</a>
   </main>
 
@@ -281,6 +309,7 @@
     const giftButton = document.querySelector("#giftButton");
     const reward = document.querySelector("#reward");
     const hint = document.querySelector("#hint");
+    const musicButton = document.querySelector("#musicButton");
 
     giftButton.addEventListener("click", () => {
       giftButton.classList.add("open");
@@ -288,6 +317,133 @@
       giftButton.setAttribute("aria-label", "Prezent otwarty");
       hint.textContent = "Twoja niespodzianka";
       reward.classList.add("visible");
+    });
+
+    // Animacja padającego śniegu
+    const canvas = document.querySelector("#snow");
+    const ctx = canvas.getContext("2d");
+    let flakes = [];
+    let width = 0;
+    let height = 0;
+
+    function resizeSnow() {
+      const pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
+      width = window.innerWidth;
+      height = window.innerHeight;
+
+      canvas.width = width * pixelRatio;
+      canvas.height = height * pixelRatio;
+      ctx.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
+
+      const flakeCount = Math.min(140, Math.floor(width / 8));
+
+      flakes = Array.from({ length: flakeCount }, () => ({
+        x: Math.random() * width,
+        y: Math.random() * height,
+        radius: Math.random() * 2.2 + 0.7,
+        speed: Math.random() * 0.8 + 0.35,
+        drift: Math.random() * 0.6 - 0.3,
+        opacity: Math.random() * 0.55 + 0.2
+      }));
+    }
+
+    function drawSnow() {
+      ctx.clearRect(0, 0, width, height);
+
+      for (const flake of flakes) {
+        ctx.beginPath();
+        ctx.arc(flake.x, flake.y, flake.radius, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(255, 250, 240, ${flake.opacity})`;
+        ctx.fill();
+
+        flake.y += flake.speed;
+        flake.x += flake.drift;
+
+        if (flake.y > height + 5) {
+          flake.y = -5;
+          flake.x = Math.random() * width;
+        }
+
+        if (flake.x < -5) flake.x = width + 5;
+        if (flake.x > width + 5) flake.x = -5;
+      }
+
+      requestAnimationFrame(drawSnow);
+    }
+
+    resizeSnow();
+    drawSnow();
+    window.addEventListener("resize", resizeSnow);
+
+    // Prosta melodia dzwonkowa zapętlona do odtworzenia
+    let audioContext;
+    let masterGain;
+    let melodyTimer;
+    let musicPlaying = false;
+
+    const melody = [
+      [659, 0.28], [659, 0.28], [659, 0.55],
+      [659, 0.28], [659, 0.28], [659, 0.55],
+      [659, 0.28], [784, 0.28], [523, 0.38],
+      [587, 0.18], [659, 0.7], [698, 0.28],
+      [698, 0.28], [698, 0.38], [698, 0.18],
+      [698, 0.28], [659, 0.28], [659, 0.28],
+      [659, 0.18], [659, 0.18], [659, 0.28],
+      [587, 0.28], [587, 0.28], [659, 0.28],
+      [587, 0.55], [784, 0.55]
+    ];
+
+    function playBell(frequency, startTime, duration) {
+      const oscillator = audioContext.createOscillator();
+      const volume = audioContext.createGain();
+
+      oscillator.type = "sine";
+      oscillator.frequency.value = frequency;
+
+      volume.gain.setValueAtTime(0.0001, startTime);
+      volume.gain.exponentialRampToValueAtTime(0.12, startTime + 0.025);
+      volume.gain.exponentialRampToValueAtTime(0.0001, startTime + duration);
+
+      oscillator.connect(volume);
+      volume.connect(masterGain);
+      oscillator.start(startTime);
+      oscillator.stop(startTime + duration + 0.03);
+    }
+
+    function playMelody() {
+      let time = audioContext.currentTime + 0.05;
+
+      for (const [frequency, duration] of melody) {
+        playBell(frequency, time, duration * 0.85);
+        time += duration;
+      }
+
+      const totalDuration = melody.reduce((sum, note) => sum + note[1], 0);
+      melodyTimer = window.setTimeout(playMelody, totalDuration * 1000 + 500);
+    }
+
+    musicButton.addEventListener("click", async () => {
+      if (!audioContext) {
+        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        masterGain = audioContext.createGain();
+        masterGain.gain.value = 0.35;
+        masterGain.connect(audioContext.destination);
+      }
+
+      if (musicPlaying) {
+        window.clearTimeout(melodyTimer);
+        masterGain.gain.setTargetAtTime(0, audioContext.currentTime, 0.08);
+        musicPlaying = false;
+        musicButton.textContent = "♫ Włącz muzykę";
+        musicButton.setAttribute("aria-pressed", "false");
+      } else {
+        await audioContext.resume();
+        masterGain.gain.setTargetAtTime(1, audioContext.currentTime, 0.08);
+        musicPlaying = true;
+        musicButton.textContent = "♫ Wyłącz muzykę";
+        musicButton.setAttribute("aria-pressed", "true");
+        playMelody();
+      }
     });
   </script>
 </body>
