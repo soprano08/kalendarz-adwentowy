@@ -6,13 +6,16 @@
   <title>Dzień 1 — Kalendarz adwentowy</title>
 
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       min-height: 100vh;
       margin: 0;
       padding: 24px;
       display: grid;
       place-items: center;
-      box-sizing: border-box;
       font-family: Arial, sans-serif;
       text-align: center;
       color: #fff;
@@ -22,21 +25,126 @@
     main {
       width: min(100%, 500px);
       padding: 36px 24px;
-      box-sizing: border-box;
       border: 2px solid #f4d58d;
       border-radius: 20px;
-      background: #fff6dd;
       color: #382710;
+      background: #fff6dd;
       box-shadow: 0 12px 30px #0003;
     }
 
-    .emoji {
-      font-size: 4rem;
+    h1 {
+      margin-top: 0;
     }
 
-    a {
+    .hint {
+      margin-bottom: 26px;
+      line-height: 1.5;
+    }
+
+    .gift-button {
+      position: relative;
+      display: block;
+      width: 150px;
+      height: 145px;
+      margin: 0 auto 25px;
+      border: 0;
+      background: transparent;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+
+    .gift-button:hover {
+      transform: translateY(-5px) scale(1.04);
+    }
+
+    .gift-box {
+      position: absolute;
+      left: 15px;
+      bottom: 5px;
+      width: 120px;
+      height: 85px;
+      border: 4px solid #8e202d;
+      border-radius: 8px;
+      background: #c93645;
+    }
+
+    .gift-lid {
+      position: absolute;
+      z-index: 2;
+      left: 5px;
+      bottom: 78px;
+      width: 140px;
+      height: 27px;
+      border: 4px solid #8e202d;
+      border-radius: 8px;
+      background: #e34b55;
+    }
+
+    .gift-ribbon {
+      position: absolute;
+      z-index: 3;
+      left: 62px;
+      bottom: 5px;
+      width: 26px;
+      height: 100px;
+      border: 3px solid #d6a52d;
+      background: #f4d15e;
+    }
+
+    .bow {
+      position: absolute;
+      z-index: 4;
+      left: 48px;
+      bottom: 100px;
+      width: 54px;
+      height: 34px;
+    }
+
+    .bow::before,
+    .bow::after {
+      position: absolute;
+      top: 5px;
+      width: 28px;
+      height: 22px;
+      border: 4px solid #d6a52d;
+      border-radius: 50% 50% 10% 50%;
+      background: #f4d15e;
+      content: "";
+    }
+
+    .bow::before {
+      left: 0;
+      transform: rotate(25deg);
+    }
+
+    .bow::after {
+      right: 0;
+      transform: scaleX(-1) rotate(25deg);
+    }
+
+    .gift-button:focus-visible {
+      outline: 4px solid #176044;
+      outline-offset: 6px;
+      border-radius: 12px;
+    }
+
+    #reward {
+      display: none;
+      margin: 24px 0;
+      padding: 18px;
+      border-radius: 14px;
+      background: #fff;
+      line-height: 1.6;
+    }
+
+    #reward.visible {
+      display: block;
+      animation: appear 0.5s ease-out;
+    }
+
+    a.back-link {
       display: inline-block;
-      margin-top: 18px;
+      margin-top: 14px;
       padding: 12px 20px;
       border-radius: 10px;
       color: #fff;
@@ -45,18 +153,67 @@
       font-weight: bold;
     }
 
-    a:hover {
+    a.back-link:hover {
       background: #912630;
+    }
+
+    @keyframes appear {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+      }
     }
   </style>
 </head>
 
 <body>
   <main>
-    <div class="emoji">🎁</div>
-    <h1>Dzień 1</h1>
-    <p>Twoja pierwsza nagroda: dziś znajdź chwilę na coś, co sprawia Ci radość. Miłego początku! 😊</p>
-    <a href="index.html">← Wróć do kalendarza</a>
+    <h1>Dzień 1 🎄</h1>
+    <p class="hint" id="hint">Kliknij prezent, żeby odkryć swoją nagrodę!</p>
+
+    <button class="gift-button" id="giftButton" type="button" aria-label="Otwórz prezent">
+      <span class="bow" aria-hidden="true"></span>
+      <span class="gift-lid" aria-hidden="true"></span>
+      <span class="gift-box" aria-hidden="true"></span>
+      <span class="gift-ribbon" aria-hidden="true"></span>
+    </button>
+
+    <section id="reward" aria-live="polite">
+      <h2>Twoja nagroda 🎁</h2>
+      <p>
+        Dziś znajdź chwilę na coś, co sprawia Ci radość.
+        Miłego początku adwentu! 😊
+      </p>
+    </section>
+
+    <a class="back-link" href="index.html">← Wróć do kalendarza</a>
   </main>
+
+  <script>
+    const giftButton = document.querySelector("#giftButton");
+    const reward = document.querySelector("#reward");
+    const hint = document.querySelector("#hint");
+
+    giftButton.addEventListener("click", () => {
+      reward.classList.add("visible");
+      hint.textContent = "Prezent otwarty! Miłego adwentu ✨";
+      giftButton.setAttribute("aria-label", "Prezent został otwarty");
+      giftButton.disabled = true;
+    });
+  </script>
 </body>
 </html>
