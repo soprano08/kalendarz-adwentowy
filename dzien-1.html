@@ -23,7 +23,7 @@
     body {
       min-height: 100vh;
       margin: 0;
-      padding: 32px 20px;
+      padding: 140px 20px 50px;
       display: grid;
       place-items: center;
       overflow-x: hidden;
@@ -38,6 +38,12 @@
       background-size: 120px 140px, 170px 180px, 200px 190px, 150px 170px, auto;
     }
 
+    .scene {
+      position: relative;
+      width: min(100%, 900px);
+      margin: 0 auto;
+    }
+
     #snow {
       position: fixed;
       inset: 0;
@@ -47,10 +53,23 @@
       pointer-events: none;
     }
 
+    .sleigh {
+      position: absolute;
+      z-index: 3;
+      top: -125px;
+      left: 50%;
+      width: min(290px, 55vw);
+      height: auto;
+      transform: translateX(-50%);
+      pointer-events: none;
+      animation: sleigh-float 5s ease-in-out infinite;
+    }
+
     main {
       position: relative;
       z-index: 2;
       width: min(100%, 520px);
+      margin: 0 auto;
       padding: 54px 38px 34px;
       text-align: center;
       background: var(--cream);
@@ -64,6 +83,17 @@
       inset: 10px;
       border: 1px solid #d8c9aa;
       pointer-events: none;
+    }
+
+    .santa {
+      position: absolute;
+      z-index: 3;
+      top: 290px;
+      right: calc((100% - 520px) / 2 - 145px);
+      width: 145px;
+      height: auto;
+      pointer-events: none;
+      animation: santa-float 4s ease-in-out infinite;
     }
 
     .eyebrow {
@@ -209,6 +239,44 @@
       }
     }
 
+    @keyframes sleigh-float {
+      0%, 100% {
+        transform: translate(-50%, 0);
+      }
+
+      50% {
+        transform: translate(-50%, -8px);
+      }
+    }
+
+    @keyframes santa-float {
+      0%, 100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-7px);
+      }
+    }
+
+    @media (max-width: 760px) {
+      body {
+        padding-top: 120px;
+      }
+
+      .sleigh {
+        top: -105px;
+        width: min(240px, 58vw);
+      }
+
+      .santa {
+        top: 260px;
+        right: -12px;
+        width: 82px;
+        opacity: 0.9;
+      }
+    }
+
     @media (max-width: 480px) {
       main {
         padding: 46px 24px 30px;
@@ -217,6 +285,12 @@
       .gift-button {
         width: 170px;
         height: 170px;
+      }
+
+      .santa {
+        top: 255px;
+        right: -8px;
+        width: 65px;
       }
     }
 
@@ -238,52 +312,68 @@
     <source src="muzyka-swiateczna.mp3" type="audio/mpeg">
   </audio>
 
-  <main>
-    <p class="eyebrow">Kalendarz adwentowy</p>
-    <h1>Dzień pierwszy</h1>
-    <div class="divider" aria-hidden="true"></div>
-    <p class="hint" id="hint">Kliknij prezent, aby odkryć niespodziankę</p>
-
-    <button
-      class="gift-button"
-      id="giftButton"
-      type="button"
-      aria-label="Otwórz prezent"
-      aria-controls="reward"
+  <div class="scene">
+    <img
+      class="sleigh"
+      src="sanie-mikolaja.png"
+      alt=""
+      aria-hidden="true"
     >
-      <svg viewBox="0 0 200 200" aria-hidden="true">
-        <ellipse cx="100" cy="171" rx="58" ry="9" fill="#263a2d" opacity=".12"/>
 
-        <path d="M53 91h94v67a8 8 0 0 1-8 8H61a8 8 0 0 1-8-8V91Z" fill="#743b3b"/>
-        <path d="M53 91h94v13H53z" fill="#834747"/>
-        <path d="M91 91h18v75H91z" fill="#c4a66a"/>
-        <path d="M94 91h12v75H94z" fill="#d8bd83"/>
+    <main>
+      <p class="eyebrow">Kalendarz adwentowy</p>
+      <h1>Dzień pierwszy</h1>
+      <div class="divider" aria-hidden="true"></div>
+      <p class="hint" id="hint">Kliknij prezent, aby odkryć niespodziankę</p>
 
-        <g class="gift-lid">
-          <path d="M43 78h114v21H43z" fill="#8a4a49"/>
-          <path d="M91 78h18v21H91z" fill="#d8bd83"/>
-          <path d="M99 79C75 74 72 57 82 55c9-2 16 10 18 24Z" fill="#c4a66a"/>
-          <path d="M101 79c24-5 27-22 17-24-9-2-16 10-18 24Z" fill="#d8bd83"/>
-          <circle cx="100" cy="78" r="6" fill="#bd9a5b"/>
-        </g>
+      <button
+        class="gift-button"
+        id="giftButton"
+        type="button"
+        aria-label="Otwórz prezent"
+        aria-controls="reward"
+      >
+        <svg viewBox="0 0 200 200" aria-hidden="true">
+          <ellipse cx="100" cy="171" rx="58" ry="9" fill="#263a2d" opacity=".12"/>
 
-        <circle cx="43" cy="53" r="2" fill="#bd9a5b"/>
-        <circle cx="158" cy="58" r="2.5" fill="#bd9a5b"/>
-        <path d="M35 125h8M39 121v8" stroke="#bd9a5b" stroke-width="1.5"/>
-        <path d="M158 126h8M162 122v8" stroke="#bd9a5b" stroke-width="1.5"/>
-      </svg>
-    </button>
+          <path d="M53 91h94v67a8 8 0 0 1-8 8H61a8 8 0 0 1-8-8V91Z" fill="#743b3b"/>
+          <path d="M53 91h94v13H53z" fill="#834747"/>
+          <path d="M91 91h18v75H91z" fill="#c4a66a"/>
+          <path d="M94 91h12v75H94z" fill="#d8bd83"/>
 
-    <section id="reward" aria-live="polite">
-      <h2>Mała chwila dla Ciebie</h2>
-      <p>
-        Znajdź dziś moment na coś, co sprawia Ci radość.
-        Niech grudzień zacznie się odrobiną spokoju.
-      </p>
-    </section>
+          <g class="gift-lid">
+            <path d="M43 78h114v21H43z" fill="#8a4a49"/>
+            <path d="M91 78h18v21H91z" fill="#d8bd83"/>
+            <path d="M99 79C75 74 72 57 82 55c9-2 16 10 18 24Z" fill="#c4a66a"/>
+            <path d="M101 79c24-5 27-22 17-24-9-2-16 10-18 24Z" fill="#d8bd83"/>
+            <circle cx="100" cy="78" r="6" fill="#bd9a5b"/>
+          </g>
 
-    <a class="back-link" href="index.html">← Wróć do kalendarza</a>
-  </main>
+          <circle cx="43" cy="53" r="2" fill="#bd9a5b"/>
+          <circle cx="158" cy="58" r="2.5" fill="#bd9a5b"/>
+          <path d="M35 125h8M39 121v8" stroke="#bd9a5b" stroke-width="1.5"/>
+          <path d="M158 126h8M162 122v8" stroke="#bd9a5b" stroke-width="1.5"/>
+        </svg>
+      </button>
+
+      <section id="reward" aria-live="polite">
+        <h2>Mała chwila dla Ciebie</h2>
+        <p>
+          Znajdź dziś moment na coś, co sprawia Ci radość.
+          Niech grudzień zacznie się odrobiną spokoju.
+        </p>
+      </section>
+
+      <a class="back-link" href="index.html">← Wróć do kalendarza</a>
+    </main>
+
+    <img
+      class="santa"
+      src="mikolaj.png"
+      alt=""
+      aria-hidden="true"
+    >
+  </div>
 
   <script>
     const giftButton = document.querySelector("#giftButton");
@@ -299,7 +389,7 @@
       reward.classList.add("visible");
     });
 
-    // Animacja padającego śniegu
+    // Padający śnieg
     const canvas = document.querySelector("#snow");
     const ctx = canvas.getContext("2d");
     let flakes = [];
@@ -355,8 +445,8 @@
     drawSnow();
     window.addEventListener("resize", resizeSnow);
 
-    // Spróbuj włączyć muzykę po wejściu na stronę.
-    // Jeśli przeglądarka zablokuje autoplay, uruchom ją po pierwszym kliknięciu.
+    // Muzyka próbuje wystartować po wejściu.
+    // Jeśli przeglądarka blokuje autoplay, ruszy po pierwszym kliknięciu.
     function startMusic() {
       music.play().catch(() => {
         document.addEventListener("click", () => {
