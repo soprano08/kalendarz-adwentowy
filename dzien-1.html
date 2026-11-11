@@ -23,7 +23,7 @@
     body {
       min-height: 100vh;
       margin: 0;
-      padding: 140px 20px 50px;
+      padding: 30px 18px;
       display: grid;
       place-items: center;
       overflow-x: hidden;
@@ -38,52 +38,34 @@
       background-size: 120px 140px, 170px 180px, 200px 190px, 150px 170px, auto;
     }
 
-    .scene {
-      --sleigh-left: 21.2%;
-      --sleigh-top: -53px;
-      --sleigh-transform: none;
-      --santa-left: 61.7%;
-      --santa-top: 195px;
-
-      position: relative;
-      width: min(100%, 900px);
-      margin: 0 auto;
-    }
-
     #snow {
       position: fixed;
       inset: 0;
       z-index: 1;
       width: 100%;
       height: 100%;
+      opacity: 0;
       pointer-events: none;
+      transition: opacity 1s ease;
     }
 
-    .sleigh {
-      position: absolute;
-      z-index: 3;
-      top: var(--sleigh-top);
-      left: var(--sleigh-left);
-      width: min(380px, 80vw);
-      height: auto;
-      transform: var(--sleigh-transform);
-      pointer-events: none;
-      animation: sleigh-float 5s ease-in-out infinite;
+    body.festive #snow {
+      opacity: 1;
     }
 
-    main {
+    .intro-screen {
       position: relative;
       z-index: 2;
       width: min(100%, 520px);
-      margin: 0 auto;
-      padding: 54px 38px 34px;
+      padding: 48px 32px 34px;
       text-align: center;
       background: var(--cream);
       border: 1px solid #d5c49f;
       box-shadow: 0 28px 80px #07120d70;
+      transition: opacity 400ms ease, transform 400ms ease;
     }
 
-    main::before {
+    .intro-screen::before {
       content: "";
       position: absolute;
       inset: 10px;
@@ -91,16 +73,9 @@
       pointer-events: none;
     }
 
-    .santa {
-      position: absolute;
-      z-index: 3;
-      top: var(--santa-top);
-      left: var(--santa-left);
-      right: auto;
-      width: min(250px, 28vw);
-      height: auto;
-      pointer-events: none;
-      animation: santa-float 4s ease-in-out infinite;
+    .intro-screen.leaving {
+      opacity: 0;
+      transform: translateY(-12px) scale(.98);
     }
 
     .eyebrow {
@@ -127,122 +102,221 @@
       background: var(--gold);
     }
 
-    .hint {
+    .intro-text {
       margin: 0;
       color: var(--muted);
       font-family: Arial, sans-serif;
-      font-size: 0.9rem;
-      letter-spacing: 0.02em;
+      font-size: 0.95rem;
+      line-height: 1.6;
     }
 
-    .gift-button {
-      position: relative;
+    .first-gift {
       display: grid;
-      width: 190px;
-      height: 190px;
-      margin: 22px auto 12px;
+      width: 150px;
+      height: 150px;
+      margin: 20px auto 0;
       padding: 0;
       place-items: center;
       border: 0;
       background: transparent;
       cursor: pointer;
-      -webkit-tap-highlight-color: transparent;
+      transition: transform 200ms ease;
     }
 
-    .gift-button svg {
+    .first-gift:hover {
+      transform: translateY(-5px);
+    }
+
+    .first-gift svg {
+      width: 100%;
+      height: 100%;
+      filter: drop-shadow(0 12px 10px #392c1b25);
+    }
+
+    .festive-scene {
+      position: relative;
+      z-index: 2;
+      width: min(100%, 1000px);
+      min-height: min(760px, calc(100vh - 60px));
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 700ms ease, transform 700ms ease;
+    }
+
+    .festive-scene[hidden] {
+      display: none;
+    }
+
+    .festive-scene.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .sleigh {
+      position: absolute;
+      z-index: 3;
+      top: -53px;
+      left: 21.2%;
+      width: min(380px, 80vw);
+      height: auto;
+      pointer-events: none;
+      animation: sleigh-float 5s ease-in-out infinite;
+    }
+
+    .santa {
+      position: absolute;
+      z-index: 3;
+      top: 195px;
+      left: 61.7%;
+      width: min(250px, 28vw);
+      height: auto;
+      pointer-events: none;
+      animation: santa-float 4s ease-in-out infinite;
+    }
+
+    .tree {
+      position: absolute;
+      z-index: 2;
+      left: 3%;
+      bottom: 18px;
+      width: clamp(190px, 28vw, 300px);
+      height: auto;
+      pointer-events: none;
+      filter: drop-shadow(0 12px 15px #07120d55);
+    }
+
+    .scene-title {
+      position: absolute;
+      z-index: 4;
+      top: 24px;
+      left: 50%;
+      width: min(90%, 460px);
+      margin: 0;
+      color: var(--cream);
+      text-align: center;
+      text-shadow: 0 2px 12px #07120d;
+      transform: translateX(-50%);
+    }
+
+    .scene-title .eyebrow {
+      color: #e5ca8c;
+    }
+
+    .scene-title h2 {
+      margin: 0;
+      font-size: clamp(1.8rem, 5vw, 2.5rem);
+      font-weight: 400;
+    }
+
+    .scene-hint {
+      margin: 10px 0 0;
+      color: #f6f0e4;
+      font-family: Arial, sans-serif;
+      font-size: 0.9rem;
+      text-shadow: 0 2px 10px #07120d;
+    }
+
+    .second-gift {
+      position: absolute;
+      z-index: 4;
+      left: 36%;
+      bottom: 38px;
+      display: grid;
+      width: 142px;
+      height: 142px;
+      padding: 0;
+      place-items: center;
+      border: 0;
+      background: transparent;
+      cursor: pointer;
+      transform: translateX(-50%);
+      transition: transform 200ms ease;
+    }
+
+    .second-gift:hover {
+      transform: translate(-50%, -6px);
+    }
+
+    .second-gift svg {
       width: 100%;
       height: 100%;
       overflow: visible;
-      filter: drop-shadow(0 12px 10px #392c1b25);
-      transition: transform 250ms ease;
+      filter: drop-shadow(0 12px 10px #07120d50);
     }
 
-    .gift-button:hover svg {
-      transform: translateY(-4px);
-    }
-
-    .gift-lid {
+    .second-gift .lid {
       transform-box: fill-box;
       transform-origin: 50% 100%;
       transition: transform 700ms cubic-bezier(.2, .8, .2, 1);
     }
 
-    .gift-button.open .gift-lid {
-      transform: translate(-10px, -27px) rotate(-13deg);
+    .second-gift.open .lid {
+      transform: translate(-8px, -24px) rotate(-13deg);
     }
 
-    .gift-button.open svg {
-      animation: gift-glow 700ms ease-out;
-    }
-
-    .gift-button:focus-visible {
-      outline: 2px solid var(--burgundy);
-      outline-offset: 3px;
-      border-radius: 50%;
-    }
-
-    .gift-button:disabled {
+    .second-gift:disabled {
       cursor: default;
     }
 
-    .gift-button:disabled:hover svg {
-      transform: none;
-    }
-
-    #reward {
+    .reward {
+      position: absolute;
+      z-index: 5;
+      left: 50%;
+      bottom: 30px;
       display: none;
-      max-width: 350px;
-      margin: 20px auto 0;
+      width: min(350px, 90%);
+      padding: 20px 24px;
+      border: 1px solid #d5c49f;
+      color: var(--ink);
+      text-align: center;
+      background: var(--cream);
+      box-shadow: 0 12px 35px #07120d70;
+      transform: translateX(-50%);
       animation: reveal 600ms ease both;
     }
 
-    #reward.visible {
+    .reward.visible {
       display: block;
     }
 
-    #reward h2 {
+    .reward h3 {
       margin: 0 0 10px;
       color: var(--burgundy);
-      font-size: 1.5rem;
+      font-size: 1.4rem;
       font-weight: 400;
     }
 
-    #reward p {
+    .reward p {
       margin: 0;
-      font-size: 1.08rem;
-      line-height: 1.7;
+      font-size: 1rem;
+      line-height: 1.6;
     }
 
     .back-link {
-      display: inline-block;
-      margin-top: 32px;
-      color: var(--pine);
+      position: fixed;
+      z-index: 6;
+      right: 20px;
+      bottom: 16px;
+      color: #f6f0e4;
       font-family: Arial, sans-serif;
       font-size: 0.8rem;
-      letter-spacing: 0.06em;
+      text-shadow: 0 2px 8px #07120d;
       text-decoration: none;
-      transition: color 150ms ease;
     }
 
     .back-link:hover {
-      color: var(--burgundy);
+      color: #e5ca8c;
     }
 
     @keyframes reveal {
       from {
         opacity: 0;
-        transform: translateY(10px);
+        transform: translate(-50%, 10px);
       }
 
       to {
         opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    @keyframes gift-glow {
-      50% {
-        filter: drop-shadow(0 0 18px #bd9a5b99);
+        transform: translate(-50%, 0);
       }
     }
 
@@ -267,27 +341,75 @@
     }
 
     @media (max-width: 760px) {
-      body {
-        padding-top: 120px;
+      .festive-scene {
+        min-height: max(680px, calc(100vh - 60px));
       }
 
       .sleigh {
-        width: min(300px, 85vw);
+        width: min(300px, 75vw);
       }
 
       .santa {
-        width: min(130px, 32vw);
+        width: min(150px, 32vw);
+      }
+
+      .tree {
+        width: clamp(175px, 38vw, 250px);
+      }
+
+      .second-gift {
+        left: 39%;
+        bottom: 34px;
+        width: 120px;
+        height: 120px;
+      }
+
+      .scene-title {
+        top: 38px;
       }
     }
 
     @media (max-width: 480px) {
-      main {
-        padding: 46px 24px 30px;
+      .intro-screen {
+        padding: 40px 24px 28px;
       }
 
-      .gift-button {
-        width: 170px;
-        height: 170px;
+      .festive-scene {
+        min-height: max(650px, calc(100vh - 60px));
+      }
+
+      .sleigh {
+        top: 0;
+        left: 4%;
+        width: 65vw;
+      }
+
+      .santa {
+        top: 190px;
+        left: auto;
+        right: 0;
+        width: 30vw;
+      }
+
+      .tree {
+        left: 0;
+        bottom: 45px;
+        width: 55vw;
+      }
+
+      .second-gift {
+        left: 43%;
+        bottom: 45px;
+        width: 100px;
+        height: 100px;
+      }
+
+      .scene-title {
+        top: 85px;
+      }
+
+      .reward {
+        bottom: 24px;
       }
     }
 
@@ -309,102 +431,94 @@
     <source src="muzyka-swiateczna.mp3" type="audio/mpeg">
   </audio>
 
-  <div class="scene">
-    <img
-      class="sleigh"
-      src="sanie-mikolaja.png"
-      alt=""
-      aria-hidden="true"
-    >
+  <section class="intro-screen" id="introScreen">
+    <p class="eyebrow">Kalendarz adwentowy</p>
+    <h1>Dzień pierwszy</h1>
+    <div class="divider" aria-hidden="true"></div>
+    <p class="intro-text">Kliknij prezent i znajdź swoją nagrodę</p>
 
-    <main>
+    <button class="first-gift" id="firstGift" type="button" aria-label="Rozpocznij dzień pierwszy">
+      <svg viewBox="0 0 200 200" aria-hidden="true">
+        <ellipse cx="100" cy="171" rx="58" ry="9" fill="#263a2d" opacity=".12"/>
+        <path d="M53 91h94v67a8 8 0 0 1-8 8H61a8 8 0 0 1-8-8V91Z" fill="#743b3b"/>
+        <path d="M53 91h94v13H53z" fill="#834747"/>
+        <path d="M91 91h18v75H91z" fill="#c4a66a"/>
+        <path d="M94 91h12v75H94z" fill="#d8bd83"/>
+        <path d="M43 78h114v21H43z" fill="#8a4a49"/>
+        <path d="M91 78h18v21H91z" fill="#d8bd83"/>
+        <path d="M99 79C75 74 72 57 82 55c9-2 16 10 18 24Z" fill="#c4a66a"/>
+        <path d="M101 79c24-5 27-22 17-24-9-2-16 10-18 24Z" fill="#d8bd83"/>
+        <circle cx="100" cy="78" r="6" fill="#bd9a5b"/>
+      </svg>
+    </button>
+  </section>
+
+  <section class="festive-scene" id="festiveScene" hidden>
+    <img class="sleigh" src="sanie-mikolaja.png" alt="" aria-hidden="true">
+    <img class="tree" src="choinka.png" alt="" aria-hidden="true">
+
+    <div class="scene-title">
       <p class="eyebrow">Kalendarz adwentowy</p>
-      <h1>Dzień pierwszy</h1>
-      <div class="divider" aria-hidden="true"></div>
-      <p class="hint" id="hint">Kliknij prezent, aby odkryć niespodziankę</p>
+      <h2>Dzień pierwszy</h2>
+      <p class="scene-hint" id="sceneHint">Kliknij prezent pod choinką</p>
+    </div>
 
-      <button
-        class="gift-button"
-        id="giftButton"
-        type="button"
-        aria-label="Otwórz prezent"
-        aria-controls="reward"
-      >
-        <svg viewBox="0 0 200 200" aria-hidden="true">
-          <ellipse cx="100" cy="171" rx="58" ry="9" fill="#263a2d" opacity=".12"/>
+    <img class="santa" src="mikolaj.png" alt="" aria-hidden="true">
 
-          <path d="M53 91h94v67a8 8 0 0 1-8 8H61a8 8 0 0 1-8-8V91Z" fill="#743b3b"/>
-          <path d="M53 91h94v13H53z" fill="#834747"/>
-          <path d="M91 91h18v75H91z" fill="#c4a66a"/>
-          <path d="M94 91h12v75H94z" fill="#d8bd83"/>
+    <button class="second-gift" id="secondGift" type="button" aria-label="Otwórz drugi prezent">
+      <svg viewBox="0 0 200 200" aria-hidden="true">
+        <ellipse cx="100" cy="174" rx="58" ry="9" fill="#07120d" opacity=".25"/>
+        <path d="M50 88h100v76a8 8 0 0 1-8 8H58a8 8 0 0 1-8-8V88Z" fill="#315d46"/>
+        <path d="M50 88h100v14H50z" fill="#3c7053"/>
+        <path d="M91 88h18v84H91z" fill="#d8bd83"/>
+        <path d="M94 88h12v84H94z" fill="#f0d89b"/>
+        <g class="lid">
+          <path d="M40 72h120v23H40z" fill="#497b5e"/>
+          <path d="M91 72h18v23H91z" fill="#f0d89b"/>
+          <path d="M99 74C76 68 74 52 84 50c8-2 14 9 16 22Z" fill="#d8bd83"/>
+          <path d="M101 74c23-6 25-22 15-24-8-2-14 9-16 22Z" fill="#f0d89b"/>
+          <circle cx="100" cy="73" r="6" fill="#bd9a5b"/>
+        </g>
+      </svg>
+    </button>
 
-          <g class="gift-lid">
-            <path d="M43 78h114v21H43z" fill="#8a4a49"/>
-            <path d="M91 78h18v21H91z" fill="#d8bd83"/>
-            <path d="M99 79C75 74 72 57 82 55c9-2 16 10 18 24Z" fill="#c4a66a"/>
-            <path d="M101 79c24-5 27-22 17-24-9-2-16 10-18 24Z" fill="#d8bd83"/>
-            <circle cx="100" cy="78" r="6" fill="#bd9a5b"/>
-          </g>
+    <section class="reward" id="reward" aria-live="polite">
+      <h3>Mała chwila dla Ciebie</h3>
+      <p>
+        Znajdź dziś moment na coś, co sprawia Ci radość.
+        Niech grudzień zacznie się odrobiną spokoju.
+      </p>
+    </section>
+  </section>
 
-          <circle cx="43" cy="53" r="2" fill="#bd9a5b"/>
-          <circle cx="158" cy="58" r="2.5" fill="#bd9a5b"/>
-          <path d="M35 125h8M39 121v8" stroke="#bd9a5b" stroke-width="1.5"/>
-          <path d="M158 126h8M162 122v8" stroke="#bd9a5b" stroke-width="1.5"/>
-        </svg>
-      </button>
-
-      <section id="reward" aria-live="polite">
-        <h2>Mała chwila dla Ciebie</h2>
-        <p>
-          Znajdź dziś moment na coś, co sprawia Ci radość.
-          Niech grudzień zacznie się odrobiną spokoju.
-        </p>
-      </section>
-
-      <a class="back-link" href="index.html">← Wróć do kalendarza</a>
-    </main>
-
-    <img
-      class="santa"
-      src="mikolaj.png"
-      alt=""
-      aria-hidden="true"
-    >
-  </div>
+  <a class="back-link" href="index.html">← Wróć do kalendarza</a>
 
   <script>
-    const giftButton = document.querySelector("#giftButton");
+    const introScreen = document.querySelector("#introScreen");
+    const festiveScene = document.querySelector("#festiveScene");
+    const firstGift = document.querySelector("#firstGift");
+    const secondGift = document.querySelector("#secondGift");
+    const sceneHint = document.querySelector("#sceneHint");
     const reward = document.querySelector("#reward");
-    const hint = document.querySelector("#hint");
     const music = document.querySelector("#backgroundMusic");
-
-    giftButton.addEventListener("click", () => {
-      giftButton.classList.add("open");
-      giftButton.disabled = true;
-      giftButton.setAttribute("aria-label", "Prezent otwarty");
-      hint.textContent = "Twoja niespodzianka";
-      reward.classList.add("visible");
-    });
-
-    // Animacja padającego śniegu
     const canvas = document.querySelector("#snow");
     const ctx = canvas.getContext("2d");
+
     let flakes = [];
     let width = 0;
     let height = 0;
+    let snowStarted = false;
 
     function resizeSnow() {
       const pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
       width = window.innerWidth;
       height = window.innerHeight;
-
       canvas.width = width * pixelRatio;
       canvas.height = height * pixelRatio;
       ctx.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
 
-      const flakeCount = Math.min(140, Math.floor(width / 8));
-
-      flakes = Array.from({ length: flakeCount }, () => ({
+      const count = Math.min(140, Math.floor(width / 8));
+      flakes = Array.from({ length: count }, () => ({
         x: Math.random() * width,
         y: Math.random() * height,
         radius: Math.random() * 2.2 + 0.7,
@@ -438,16 +552,31 @@
       requestAnimationFrame(drawSnow);
     }
 
-    resizeSnow();
-    drawSnow();
-    window.addEventListener("resize", resizeSnow);
+    firstGift.addEventListener("click", async () => {
+      document.body.classList.add("festive");
+      introScreen.classList.add("leaving");
 
-    // Muzyka startuje automatycznie, jeśli przeglądarka na to pozwala.
-    // Jeśli autoplay zostanie zablokowany, ruszy po pierwszym kliknięciu.
-    music.play().catch(() => {
-      document.addEventListener("click", () => {
-        music.play().catch(() => {});
-      }, { once: true });
+      music.play().catch(() => {});
+
+      if (!snowStarted) {
+        snowStarted = true;
+        resizeSnow();
+        drawSnow();
+        window.addEventListener("resize", resizeSnow);
+      }
+
+      window.setTimeout(() => {
+        introScreen.hidden = true;
+        festiveScene.hidden = false;
+        requestAnimationFrame(() => festiveScene.classList.add("visible"));
+      }, 350);
+    });
+
+    secondGift.addEventListener("click", () => {
+      secondGift.classList.add("open");
+      secondGift.disabled = true;
+      sceneHint.textContent = "Twoja niespodzianka";
+      reward.classList.add("visible");
     });
   </script>
 </body>
