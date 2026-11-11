@@ -39,11 +39,11 @@
     }
 
     .scene {
-      --sleigh-left: 50%;
-      --sleigh-top: -130px;
-      --sleigh-transform: translateX(-50%);
-      --santa-left: calc(50% + 70px);
-      --santa-top: 270px;
+      --sleigh-left: 21.2%;
+      --sleigh-top: -53px;
+      --sleigh-transform: none;
+      --santa-left: 61.7%;
+      --santa-top: 195px;
 
       position: relative;
       width: min(100%, 900px);
@@ -228,74 +228,6 @@
       color: var(--burgundy);
     }
 
-    #positionEditor[hidden] {
-      display: none;
-    }
-
-    #positionEditor {
-      position: fixed;
-      z-index: 10;
-      right: 12px;
-      bottom: 12px;
-      left: 12px;
-      width: min(600px, calc(100% - 24px));
-      max-height: 38vh;
-      margin: 0 auto;
-      overflow: auto;
-      padding: 14px;
-      border: 1px solid #bd9a5b;
-      color: #f6f0e4;
-      background: #14271fee;
-      box-shadow: 0 8px 30px #0008;
-      font-family: Arial, sans-serif;
-      text-align: left;
-    }
-
-    #positionEditor p {
-      margin: 0 0 10px;
-      font-size: 14px;
-      line-height: 1.4;
-    }
-
-    #positionEditor button {
-      padding: 8px 12px;
-      border: 1px solid #bd9a5b;
-      color: #f6f0e4;
-      background: #743b3b;
-      cursor: pointer;
-    }
-
-    #positionCode {
-      margin: 10px 0 6px;
-      padding: 10px;
-      overflow-x: auto;
-      color: #f6f0e4;
-      background: #07120d;
-      font-size: 12px;
-      white-space: pre-wrap;
-      user-select: all;
-    }
-
-    #copyStatus {
-      min-height: 16px;
-      font-size: 12px;
-    }
-
-    body.edit-mode .sleigh,
-    body.edit-mode .santa {
-      z-index: 5;
-      pointer-events: auto;
-      cursor: grab;
-      touch-action: none;
-      outline: 1px dashed #f4d15e;
-      animation: none;
-    }
-
-    body.edit-mode .sleigh:active,
-    body.edit-mode .santa:active {
-      cursor: grabbing;
-    }
-
     @keyframes reveal {
       from {
         opacity: 0;
@@ -377,10 +309,9 @@
     <source src="muzyka-swiateczna.mp3" type="audio/mpeg">
   </audio>
 
-  <div class="scene" id="scene">
+  <div class="scene">
     <img
       class="sleigh"
-      id="sleigh"
       src="sanie-mikolaja.png"
       alt=""
       aria-hidden="true"
@@ -435,18 +366,10 @@
 
     <img
       class="santa"
-      id="santa"
       src="mikolaj.png"
       alt=""
       aria-hidden="true"
     >
-  </div>
-
-  <div id="positionEditor" hidden>
-    <p><strong>Tryb ustawiania:</strong> przeciągnij sanie i Mikołaja myszką, gdzie chcesz.</p>
-    <button id="copyPositions" type="button">Kopiuj pozycje CSS</button>
-    <pre id="positionCode"></pre>
-    <div id="copyStatus"></div>
   </div>
 
   <script>
@@ -519,113 +442,13 @@
     drawSnow();
     window.addEventListener("resize", resizeSnow);
 
-    // Muzyka próbuje wystartować po wejściu.
-    // Jeśli przeglądarka zablokuje autoplay, ruszy po pierwszym kliknięciu.
-    function startMusic() {
-      music.play().catch(() => {
-        document.addEventListener("click", () => {
-          music.play().catch(() => {});
-        }, { once: true });
-      });
-    }
-
-    startMusic();
-
-    // Tryb ustawiania włącza się tylko z adresem ?ustaw=1
-    const editMode = new URLSearchParams(window.location.search).get("ustaw") === "1";
-    const editor = document.querySelector("#positionEditor");
-    const positionCode = document.querySelector("#positionCode");
-    const copyStatus = document.querySelector("#copyStatus");
-    const scene = document.querySelector("#scene");
-    const decorations = [
-      document.querySelector("#sleigh"),
-      document.querySelector("#santa")
-    ];
-
-    function updatePositionCode() {
-      const sceneWidth = scene.clientWidth || 1;
-      const sleighLeft = parseFloat(decorations[0].style.left) || 0;
-      const sleighTop = parseFloat(decorations[0].style.top) || 0;
-      const santaLeft = parseFloat(decorations[1].style.left) || 0;
-      const santaTop = parseFloat(decorations[1].style.top) || 0;
-
-      positionCode.textContent =
-`.scene {
-  --sleigh-left: ${(sleighLeft / sceneWidth * 100).toFixed(1)}%;
-  --sleigh-top: ${Math.round(sleighTop)}px;
-  --sleigh-transform: none;
-  --santa-left: ${(santaLeft / sceneWidth * 100).toFixed(1)}%;
-  --santa-top: ${Math.round(santaTop)}px;
-}`;
-    }
-
-    if (editMode) {
-      document.body.classList.add("edit-mode");
-      editor.hidden = false;
-
-      requestAnimationFrame(() => {
-        const sceneRect = scene.getBoundingClientRect();
-
-        for (const image of decorations) {
-          const imageRect = image.getBoundingClientRect();
-          const left = imageRect.left - sceneRect.left;
-          const top = imageRect.top - sceneRect.top;
-
-          image.style.left = `${left}px`;
-          image.style.top = `${top}px`;
-          image.style.right = "auto";
-          image.style.transform = "none";
-        }
-
-        updatePositionCode();
-      });
-
-      let draggedImage = null;
-      let startX = 0;
-      let startY = 0;
-      let originalLeft = 0;
-      let originalTop = 0;
-
-      for (const image of decorations) {
-        image.addEventListener("pointerdown", (event) => {
-          event.preventDefault();
-          draggedImage = image;
-          startX = event.clientX;
-          startY = event.clientY;
-          originalLeft = parseFloat(image.style.left) || 0;
-          originalTop = parseFloat(image.style.top) || 0;
-          image.setPointerCapture(event.pointerId);
-        });
-
-        image.addEventListener("pointermove", (event) => {
-          if (draggedImage !== image) return;
-
-          const left = originalLeft + event.clientX - startX;
-          const top = originalTop + event.clientY - startY;
-
-          image.style.left = `${left}px`;
-          image.style.top = `${top}px`;
-          updatePositionCode();
-        });
-
-        image.addEventListener("pointerup", () => {
-          if (draggedImage === image) draggedImage = null;
-        });
-
-        image.addEventListener("pointercancel", () => {
-          if (draggedImage === image) draggedImage = null;
-        });
-      }
-
-      document.querySelector("#copyPositions").addEventListener("click", async () => {
-        try {
-          await navigator.clipboard.writeText(positionCode.textContent);
-          copyStatus.textContent = "Pozycje skopiowane. Wklej je do reguły .scene w CSS.";
-        } catch {
-          copyStatus.textContent = "Zaznacz kod powyżej i skopiuj go ręcznie.";
-        }
-      });
-    }
+    // Muzyka startuje automatycznie, jeśli przeglądarka na to pozwala.
+    // Jeśli autoplay zostanie zablokowany, ruszy po pierwszym kliknięciu.
+    music.play().catch(() => {
+      document.addEventListener("click", () => {
+        music.play().catch(() => {});
+      }, { once: true });
+    });
   </script>
 </body>
 </html>
