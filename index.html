@@ -4,153 +4,40 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Kalendarz adwentowy</title>
-
-  <style>
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
-      margin: 0;
-      min-height: 100vh;
-      padding: 40px 20px;
-      font-family: Arial, sans-serif;
-      color: #fff;
-      text-align: center;
-      background: linear-gradient(135deg, #123b2a, #176044);
-    }
-
-    h1 {
-      margin-bottom: 10px;
-      font-size: clamp(2rem, 6vw, 3.5rem);
-    }
-
-    .intro {
-      max-width: 600px;
-      margin: 0 auto 30px;
-      line-height: 1.5;
-    }
-
-    .calendar {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(60px, 120px));
-      justify-content: center;
-      gap: 14px;
-      max-width: 540px;
-      margin: 0 auto;
-    }
-
-    .door {
-      display: grid;
-      min-height: 90px;
-      place-items: center;
-      border: 2px solid #f4d58d;
-      border-radius: 14px;
-      color: #fff;
-      background: #b3313b;
-      font-size: 2rem;
-      font-weight: bold;
-      text-decoration: none;
-      cursor: pointer;
-      box-shadow: 0 5px 0 #76212a;
-      transition: transform 0.15s, background 0.15s;
-    }
-
-    .door:hover {
-      transform: translateY(-3px);
-      background: #cf414a;
-    }
-
-    #message {
-      min-height: 70px;
-      max-width: 540px;
-      margin: 28px auto 0;
-      padding: 18px;
-      border-radius: 14px;
-      color: #382710;
-      background: #fff6dd;
-      font-size: 1.1rem;
-      line-height: 1.5;
-    }
-
-    @media (max-width: 420px) {
-      .calendar {
-        grid-template-columns: repeat(4, minmax(55px, 1fr));
-        gap: 10px;
-      }
-
-      .door {
-        min-height: 72px;
-      }
-    }
-  </style>
+  <link rel="stylesheet" href="index.css">
 </head>
 
 <body>
   <main>
     <h1>🎄 Kalendarz adwentowy 🎄</h1>
-    <p class="intro">
-      Kliknij wybrany dzień i odkryj małą niespodziankę!
-    </p>
+    <p class="intro">Kliknij wybrany dzień i odkryj małą niespodziankę!</p>
 
-    <section class="calendar" id="calendar" aria-label="Kalendarz adwentowy"></section>
-
-    <p id="message" aria-live="polite">
-      Tutaj pojawi się niespodzianka. Wybierz okienko!
-    </p>
+    <nav class="calendar" aria-label="Kalendarz adwentowy">
+      <a class="door" href="dzien-1.html" aria-label="Otwórz dzień 1">1</a>
+      <a class="door" href="dzien-2.html" aria-label="Otwórz dzień 2">2</a>
+      <a class="door" href="dzien-3.html" aria-label="Otwórz dzień 3">3</a>
+      <a class="door" href="dzien-4.html" aria-label="Otwórz dzień 4">4</a>
+      <a class="door" href="dzien-5.html" aria-label="Otwórz dzień 5">5</a>
+      <a class="door" href="dzien-6.html" aria-label="Otwórz dzień 6">6</a>
+      <a class="door" href="dzien-7.html" aria-label="Otwórz dzień 7">7</a>
+      <a class="door" href="dzien-8.html" aria-label="Otwórz dzień 8">8</a>
+      <a class="door" href="dzien-9.html" aria-label="Otwórz dzień 9">9</a>
+      <a class="door" href="dzien-10.html" aria-label="Otwórz dzień 10">10</a>
+      <a class="door" href="dzien-11.html" aria-label="Otwórz dzień 11">11</a>
+      <a class="door" href="dzien-12.html" aria-label="Otwórz dzień 12">12</a>
+      <a class="door" href="dzien-13.html" aria-label="Otwórz dzień 13">13</a>
+      <a class="door" href="dzien-14.html" aria-label="Otwórz dzień 14">14</a>
+      <a class="door" href="dzien-15.html" aria-label="Otwórz dzień 15">15</a>
+      <a class="door" href="dzien-16.html" aria-label="Otwórz dzień 16">16</a>
+      <a class="door" href="dzien-17.html" aria-label="Otwórz dzień 17">17</a>
+      <a class="door" href="dzien-18.html" aria-label="Otwórz dzień 18">18</a>
+      <a class="door" href="dzien-19.html" aria-label="Otwórz dzień 19">19</a>
+      <a class="door" href="dzien-20.html" aria-label="Otwórz dzień 20">20</a>
+      <a class="door" href="dzien-21.html" aria-label="Otwórz dzień 21">21</a>
+      <a class="door" href="dzien-22.html" aria-label="Otwórz dzień 22">22</a>
+      <a class="door" href="dzien-23.html" aria-label="Otwórz dzień 23">23</a>
+      <a class="door" href="dzien-24.html" aria-label="Otwórz dzień 24">24</a>
+    </nav>
   </main>
-
-  <script>
-    const surprises = [
-      "Dzień 1: Twoja pierwsza nagroda czeka na podstronie! 🎁",
-      "Dzień 2: Zrób sobie kubek gorącej czekolady ☕",
-      "Dzień 3: Posłuchaj ulubionej świątecznej piosenki 🎶",
-      "Dzień 4: Napisz miłą wiadomość do bliskiej osoby 💌",
-      "Dzień 5: Obejrzyj świąteczny film 🎬",
-      "Dzień 6: Zjedz coś pysznego 🍪",
-      "Dzień 7: Zrób krótki spacer 🚶",
-      "Dzień 8: Powiedz komuś coś miłego 💛",
-      "Dzień 9: Zrób papierową śnieżynkę ❄️",
-      "Dzień 10: Zatańcz do jednej piosenki 💃",
-      "Dzień 11: Zrób sobie chwilę odpoczynku 🧣",
-      "Dzień 12: Podziel się czymś dobrym 🎁",
-      "Dzień 13: Zadzwoń do kogoś bliskiego 📞",
-      "Dzień 14: Zrób zdjęcie zimowej przyrody 📷",
-      "Dzień 15: Upiecz albo udekoruj ciasteczko 🍪",
-      "Dzień 16: Przeczytaj kilka stron książki 📖",
-      "Dzień 17: Zapal lampki lub świeczkę ✨",
-      "Dzień 18: Przypomnij sobie coś miłego z tego roku 🌟",
-      "Dzień 19: Zagraj w ulubioną grę 🎲",
-      "Dzień 20: Zrób komuś małą niespodziankę 🎀",
-      "Dzień 21: Załóż ciepłe skarpetki 🧦",
-      "Dzień 22: Zobacz coś, co poprawia Ci humor 😄",
-      "Dzień 23: Przygotuj się na święta bez pośpiechu 🎄",
-      "Dzień 24: Wesołych Świąt! 🎅"
-    ];
-
-    const calendar = document.querySelector("#calendar");
-    const message = document.querySelector("#message");
-
-    surprises.forEach((surprise, index) => {
-      const day = index + 1;
-      const door = document.createElement("a");
-
-      door.className = "door";
-      door.textContent = day;
-      door.setAttribute("aria-label", `Otwórz dzień ${day}`);
-
-      if (day === 1) {
-        door.href = "dzien-1.html";
-      } else {
-        door.href = "#";
-        door.addEventListener("click", (event) => {
-          event.preventDefault();
-          message.textContent = surprise;
-        });
-      }
-
-      calendar.appendChild(door);
-    });
-  </script>
 </body>
 </html>
